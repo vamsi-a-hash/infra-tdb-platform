@@ -1,0 +1,11 @@
+app:
+  name: talkingdb
+  env: dev
+
+python:
+  min_version: "3.12"
+  venv_name: ".venv"
+
+traefik:
+  image: traefik:v3.6.4
+  dashboard: info.localhost

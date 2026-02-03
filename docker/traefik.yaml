@@ -1,0 +1,25 @@
+services:
+  traefik:
+    image: ${TRAEFIK_IMAGE}
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      - talkingdb-net
+    command:
+      - --entrypoints.web.address=:80
+      - --providers.docker=true
+      - --api.dashboard=true
+      - --log.level=INFO
+      - --api.insecure=true 
+    labels:
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_DASHBOARD}`)"
+    ports:
+      - "80:80" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  talkingdb-net:
+    name: talkingdb-net
+    external: true

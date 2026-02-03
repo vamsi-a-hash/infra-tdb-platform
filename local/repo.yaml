@@ -1,0 +1,14 @@
+repos:
+  - git@bitbucket.org:smartercodes-repo/app-talkingdb.git
+  - git@bitbucket.org:smartercodes-repo/base-tdb-clients.git
+  - git@bitbucket.org:smartercodes-repo/base-tdb-helpers.git
+  - git@bitbucket.org:smartercodes-repo/base-tdb-models.git
+  - git@bitbucket.org:smartercodes-repo/doc-talkingdb.git
+  - git@bitbucket.org:smartercodes-repo/module-talkingdb.git
+  - git@bitbucket.org:smartercodes-repo/package-content-elementizer.git
+  - git@bitbucket.org:smartercodes-repo/package-text-tokenizer.git
+  - git@bitbucket.org:smartercodes-repo/package-symbol-generator.git
+  - git@bitbucket.org:smartercodes-repo/package-root-resolver.git
+  - git@bitbucket.org:smartercodes-repo/package-graph-indexer.git
+  - git@bitbucket.org:smartercodes-repo/package-semantic-extractor.git
+  - git@bitbucket.org:smartercodes-repo/test-talkingdb.git
