@@ -1,14 +1,14 @@
 repos:
-  - git@bitbucket.org:smartercodes-repo/app-talkingdb.git
-  - git@bitbucket.org:smartercodes-repo/base-tdb-clients.git
-  - git@bitbucket.org:smartercodes-repo/base-tdb-helpers.git
-  - git@bitbucket.org:smartercodes-repo/base-tdb-models.git
-  - git@bitbucket.org:smartercodes-repo/doc-talkingdb.git
-  - git@bitbucket.org:smartercodes-repo/module-talkingdb.git
-  - git@bitbucket.org:smartercodes-repo/package-content-elementizer.git
-  - git@bitbucket.org:smartercodes-repo/package-text-tokenizer.git
-  - git@bitbucket.org:smartercodes-repo/package-symbol-generator.git
-  - git@bitbucket.org:smartercodes-repo/package-root-resolver.git
-  - git@bitbucket.org:smartercodes-repo/package-graph-indexer.git
-  - git@bitbucket.org:smartercodes-repo/package-semantic-extractor.git
-  - git@bitbucket.org:smartercodes-repo/test-talkingdb.git
+  # - https://github.com/TalkingDB/app-talkingdb.git
+  - https://github.com/TalkingDB/base-tdb-clients.git
+  - https://github.com/TalkingDB/base-tdb-helpers.git
+  - https://github.com/TalkingDB/base-tdb-models.git
+  # - https://github.com/TalkingDB/doc-talkingdb.git
+  - https://github.com/TalkingDB/module-talkingdb.git
+  - https://github.com/TalkingDB/package-content-elementizer.git
+  # - https://github.com/TalkingDB/package-text-tokenizer.git
+  # - https://github.com/TalkingDB/package-symbol-generator.git
+  # - https://github.com/TalkingDB/package-root-resolver.git
+  # - https://github.com/TalkingDB/package-graph-indexer.git
+  # - https://github.com/TalkingDB/package-semantic-extractor.git
+  # - https://github.com/TalkingDB/test-talkingdb.git
