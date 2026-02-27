@@ -91,21 +91,21 @@ fi
 # 2. base-tdb-helpers (make sync + git)
 # ─────────────────────────────────────────────────────────────
 if [[ -d "$ROOT_DIR/base-tdb-helpers" ]]; then
-  run_git_sync "$ROOT_DIR/base-tdb-helpers" "true" "false"
+  run_git_sync "$ROOT_DIR/base-tdb-helpers" "true" "true"
 fi
 
 # ─────────────────────────────────────────────────────────────
 # 3. package-* (make sync + git)
 # ─────────────────────────────────────────────────────────────
 for dir in "$ROOT_DIR"/package-*; do
-  [[ -d "$dir" ]] && run_git_sync "$dir" "true" "false"
+  [[ -d "$dir" ]] && run_git_sync "$dir" "true" "true"
 done
 
 # ─────────────────────────────────────────────────────────────
 # 4. module-* (make sync + git)
 # ─────────────────────────────────────────────────────────────
 for dir in "$ROOT_DIR"/module-*; do
-  [[ -d "$dir" ]] && run_git_sync "$dir" "true" "false"
+  [[ -d "$dir" ]] && run_git_sync "$dir" "true" "true"
 done
 
 
