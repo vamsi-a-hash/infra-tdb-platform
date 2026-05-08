@@ -49,4 +49,7 @@ WORKSPACE_FILE="$WORKSPACE/talkingdb.code-workspace"
 } > "$WORKSPACE_FILE"
 echo "  → $WORKSPACE_FILE"
 
-echo "✔ Workspace ready. Run 'make local' from $INFRA_DIR to start the platform."
+echo "✔ Workspace ready."
+echo "  • Run 'make local' from $INFRA_DIR to start the platform."
+echo "  • For a multi-root view of all repos in VS Code:"
+echo "      File → Open Workspace from File... → talkingdb.code-workspace"

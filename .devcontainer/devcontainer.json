@@ -40,6 +40,5 @@
 
   "remoteUser": "vscode",
 
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postAttachCommand": "code /workspaces/Talking-db-SC/talkingdb.code-workspace"
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
 }
