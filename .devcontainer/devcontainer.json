@@ -10,7 +10,7 @@
   },
 
   "workspaceFolder": "/workspaces/Talking-db-SC",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/Talking-db-SC/infra-tdb-platform,type=bind,consistency=cached",
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces/Talking-db-SC,type=bind,consistency=cached",
 
   "forwardPorts": [8090, 8091, 5690],
   "portsAttributes": {
