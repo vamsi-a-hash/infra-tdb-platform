@@ -7,8 +7,10 @@ INFRA_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 WORKSPACE="$(cd "$INFRA_DIR/.." && pwd)"
 MODULE_DIR="$WORKSPACE/module-talkingdb"
 
-echo "▶ Trusting all repos in the workspace (WSL2 bind-mount ownership mismatch)"
-git config --global --add safe.directory '*' || true
+echo "▶ Trusting sibling repos in the workspace (WSL2 bind-mount ownership mismatch)"
+for repo_git in "$WORKSPACE"/*/.git; do
+  [[ -d "$repo_git" ]] && git config --global --add safe.directory "$(dirname "$repo_git")" || true
+done
 
 echo "▶ Stripping CRLF from shell scripts, Makefiles, and env files across workspace"
 find "$WORKSPACE" -type f \( -name "*.sh" -o -name "Makefile" -o -name ".env" -o -name ".env.*" -o -name "env_example.sh" \) \
