@@ -10,8 +10,8 @@ MODULE_DIR="$WORKSPACE/module-talkingdb"
 echo "▶ Trusting all repos in the workspace (WSL2 bind-mount ownership mismatch)"
 git config --global --add safe.directory '*' || true
 
-echo "▶ Stripping CRLF from shell scripts and Makefiles across workspace"
-find "$WORKSPACE" -type f \( -name "*.sh" -o -name "Makefile" \) \
+echo "▶ Stripping CRLF from shell scripts, Makefiles, and env files across workspace"
+find "$WORKSPACE" -type f \( -name "*.sh" -o -name "Makefile" -o -name ".env" -o -name ".env.*" -o -name "env_example.sh" \) \
   -not -path "*/.git/*" \
   -not -path "*/.venv/*" \
   -not -path "*/node_modules/*" \
