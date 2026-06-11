@@ -1,14 +1,6 @@
 repos:
-  # - https://github.com/TalkingDB/app-talkingdb.git
+  - https://github.com/TalkingDB/base-tdb-models.git
   - https://github.com/TalkingDB/base-tdb-clients.git
   - https://github.com/TalkingDB/base-tdb-helpers.git
-  - https://github.com/TalkingDB/base-tdb-models.git
-  # - https://github.com/TalkingDB/doc-talkingdb.git
-  - https://github.com/TalkingDB/module-talkingdb.git
   - https://github.com/TalkingDB/package-content-elementizer.git
-  # - https://github.com/TalkingDB/package-text-tokenizer.git
-  # - https://github.com/TalkingDB/package-symbol-generator.git
-  # - https://github.com/TalkingDB/package-root-resolver.git
-  # - https://github.com/TalkingDB/package-graph-indexer.git
-  # - https://github.com/TalkingDB/package-semantic-extractor.git
-  # - https://github.com/TalkingDB/test-talkingdb.git
+  - https://github.com/TalkingDB/module-talkingdb.git
