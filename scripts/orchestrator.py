@@ -1,3 +1,4 @@
+import os
 import yaml
 import subprocess
 import tempfile
@@ -22,7 +23,10 @@ def extract_name(url):
 
 def git_clone(url, path):
     run(["git", "clone", url, str(path)])
-
+    
+def set_git_auth(repo_path, url, token):
+    auth_url = url.replace("https://", f"https://x-access-token:{token}@")
+    run(["git", "remote", "set-url", "origin", auth_url], cwd=repo_path)
 
 def commit_if_needed(repo_path, msg):
     status = subprocess.run(
@@ -46,6 +50,10 @@ def commit_if_needed(repo_path, msg):
 def run_sync_logic(repo_path):
     sync_script = f"{repo_path}/sync_git_deps.py"
 
+    if not sync_script.exists():
+        print("No sync script found, skipping")
+        return
+
     run([
         "python",
         str(sync_script),
@@ -62,6 +70,7 @@ def process_repos(repos):
             
             repo_path = Path(tmp) / name
             git_clone(url, repo_path)
+            set_git_auth(repo_path, url, os.environ["GH_PAT"])
     
             # ensure git identity in CI
             run(["git", "config", "user.name", "github-actions[bot]"], cwd=repo_path)
