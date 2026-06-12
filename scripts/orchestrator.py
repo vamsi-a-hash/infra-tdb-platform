@@ -6,7 +6,6 @@ from pathlib import Path
 
 REPOS_FILE = Path("local/repo.yaml")
 
-
 def run(cmd, cwd=None):
     print(">", " ".join(cmd))
     subprocess.run(cmd, cwd=cwd, check=True)
@@ -24,9 +23,17 @@ def extract_name(url):
 def git_clone(url, path):
     run(["git", "clone", url, str(path)])
     
-def set_git_auth(repo_path, url, token):
-    auth_url = url.replace("https://", f"https://x-access-token:{token}@")
-    run(["git", "remote", "set-url", "origin", auth_url], cwd=repo_path)
+def setup_git_auth():
+    token = os.environ["GH_PAT"]
+    if not token:
+        raise Exception("GH_PAT missing")
+
+    subprocess.run([
+        "git", "config",
+        "--global",
+        "credential.helper",
+        f"!f() {{ echo username=x-access-token; echo password={token}; }}; f"
+    ], check=True)
 
 def commit_if_needed(repo_path, msg):
     status = subprocess.run(
@@ -72,7 +79,6 @@ def process_repos(repos):
             
             repo_path = Path(tmp) / name
             git_clone(url, repo_path)
-            set_git_auth(repo_path, url, os.environ["GH_PAT"])
     
             # ensure git identity in CI
             run(["git", "config", "user.name", "github-actions[bot]"], cwd=repo_path)
@@ -91,6 +97,7 @@ def process_repos(repos):
 
 
 def main():
+    setup_git_auth()
     repos = load_repos()
     process_repos(repos)
 
