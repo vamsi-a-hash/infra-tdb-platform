@@ -12,14 +12,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-          
-      - name: Docker Login to Artifact Registry
+
+      - name: Docker Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: us-central1-docker.pkg.dev
-          username: _json_key
-          password: ${{ secrets.GCP_SA_KEY }}
-          
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PAT }}
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
