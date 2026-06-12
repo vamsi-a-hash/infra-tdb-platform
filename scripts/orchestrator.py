@@ -49,12 +49,6 @@ def commit_if_needed(repo_path, msg):
 
 def run_sync_logic(repo_path):
     sync_script = f"{repo_path}/sync_git_deps.py"
-
-    run([
-        "git",
-        "remote",
-        "-v",
-    ], cwd=repo_path)
     
     run([
         "python",
