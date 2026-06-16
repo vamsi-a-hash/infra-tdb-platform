@@ -5,6 +5,7 @@ metadata:
   title: TalkingDB Release Pipeline
   description: Trigger release + optional docker build for TalkingDB repos
 spec:
+  type: service
   owner: user:default/mayank.g
 
   parameters:
