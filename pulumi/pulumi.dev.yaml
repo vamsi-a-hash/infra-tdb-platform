@@ -1,0 +1,8 @@
+config:
+  gcp:project: talkingdb-40099
+  gcp:region: asia-south1
+  gcp:zone: asia-south1-c
+
+  talkingdb:env: dev
+  talkingdb:machine_type: e2-standard-2
+  talkingdb:domain: ttt-rc1.talkingdb.io

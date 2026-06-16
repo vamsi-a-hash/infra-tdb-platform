@@ -1,0 +1,6 @@
+name: talkingdb-infra
+runtime:
+  name: python
+  options:
+    virtualenv: .venv
+description: TalkingDB GCP infrastructure — VMs, networking, DNS, storage, firewall.

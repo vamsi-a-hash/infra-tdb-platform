@@ -6,6 +6,7 @@ ENV ?= dev
 LOCAL_DEPLOY_SCRIPT = scripts/deploy.sh
 LOCAL_SYNC_SCRIPT = scripts/sync_git.sh
 LOCAL_PUSH_SCRIPT = scripts/push_git.sh
+PULUMI_DIR = pulumi
 
 .DEFAULT_GOAL := help
 .PHONY: help local local-up local-down local-status infra-up tdbcli-install tdbcli-uninstall tdbcli-install-user
@@ -14,6 +15,7 @@ LOCAL_PUSH_SCRIPT = scripts/push_git.sh
 TDBCLI_NAME ?= tdbcli
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
+STACK ?= dev
 
 # -----------------------
 # Targets
@@ -86,3 +88,16 @@ venv:
 
 debug-config:
 	@python vscode/debug_launch.py
+
+infra-preview:
+	@echo "Previewing infrastructure changes (stack=$(STACK))"
+	cd $(PULUMI_DIR) && source .venv/bin/activate && pulumi stack select $(STACK) && pulumi preview
+ 
+infra-up:
+	@echo "Applying infrastructure changes (stack=$(STACK))"
+	cd $(PULUMI_DIR) && source .venv/bin/activate && pulumi stack select $(STACK) && pulumi up
+ 
+infra-destroy:
+	@echo "Destroying infrastructure (stack=$(STACK)) — are you sure?"
+	cd $(PULUMI_DIR) && source .venv/bin/activate && pulumi stack select $(STACK) && pulumi destroy
+ 
