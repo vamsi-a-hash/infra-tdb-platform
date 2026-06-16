@@ -11,31 +11,31 @@ spec:
   parameters:
     - title: Release Configuration
       properties:
-        hostDomain:
+        host_domain:
           type: string
           title: Host Domain
 
-        base-tdb-models-branch:
+        base_tdb_models_branch:
           type: string
           title: base-tdb-models branch
           default: main
 
-        base-tdb-clients-branch:
+        base_tdb_clients_branch:
           type: string
           title: base-tdb-clients branch
           default: main
 
-        base-tdb-helpers-branch:
+        base_tdb_h helpers_branch:
           type: string
           title: base-tdb-helpers branch
           default: main
 
-        package-content-elementizer-branch:
+        package_content_elementizer_branch:
           type: string
           title: package-content-elementizer branch
           default: main
 
-        module-ttt-branch:
+        module_ttt_branch:
           type: string
           title: module-ttt branch
           default: main
@@ -71,15 +71,15 @@ spec:
         workflowId: sync.yml
         branchOrTagName: main
         workflowInputs:
-          host: ${{ parameters.hostDomain  || ''}}
+          host: ${{ parameters.host_domain  || ''}}
 
           repos_json: >
             [
-              { "url": "https://github.com/TalkingDB/base-tdb-models.git", "branch": "${{ parameters['base-tdb-models-branch'] }}" },
-              { "url": "https://github.com/TalkingDB/base-tdb-clients.git", "branch": "${{ parameters['base-tdb-clients-branch'] }}" },
-              { "url": "https://github.com/TalkingDB/base-tdb-helpers.git", "branch": "${{ parameters['base-tdb-helpers-branch'] }}" },
-              { "url": "https://github.com/TalkingDB/package-content-elementizer.git", "branch": "${{ parameters['package-content-elementizer-branch'] }}" },
-              { "url": "https://github.com/TalkingDB/module-ttt.git", "branch": "${{ parameters['module-ttt-branch'] }}" },
+              { "url": "https://github.com/TalkingDB/base-tdb-models.git", "branch": "${{ parameters.base_tdb_models_branch }}" },
+              { "url": "https://github.com/TalkingDB/base-tdb-clients.git", "branch": "${{ parameters.base_tdb_clients_branch }}" },
+              { "url": "https://github.com/TalkingDB/base-tdb-helpers.git", "branch": "${{ parameters.base_tdb_h helpers_branch }}" },
+              { "url": "https://github.com/TalkingDB/package-content-elementizer.git", "branch": "${{ parameters.package_content_elementizer_branch }}" },
+              { "url": "https://github.com/TalkingDB/module-ttt.git", "branch": "${{ parameters.module_ttt_branch }}" },
             ]
 
           docker_module_ttt: ${{ parameters.docker_module_ttt && 'true' || 'false' }}
