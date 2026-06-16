@@ -84,11 +84,11 @@ spec:
           package_elementizer_branch: ${{ parameters["package-content-elementizer-branch"] }}
           module_ttt_branch: ${{ parameters["module-ttt-branch"] }}
 
-          build_docker_elementizer: ${{ parameters.docker_elementizer }}
-          build_docker_module_ttt: ${{ parameters.docker_module_ttt }}
+          build_docker_elementizer: ${{ parameters.docker_elementizer ? 'true' : 'false' }}
+          build_docker_module_ttt: ${{ parameters.docker_module_ttt ? 'true' : 'false' }}
 
-          elementizer_tag: ${{ parameters.elementizer_tag }}
-          module_ttt_tag: ${{ parameters.module_ttt_tag }}
+          elementizer_tag: ${{ parameters.elementizer_tag || '' }}
+          module_ttt_tag: ${{ parameters.module_ttt_tag || '' }}
 
   output:
     text:
