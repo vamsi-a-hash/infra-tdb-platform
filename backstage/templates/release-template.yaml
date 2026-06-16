@@ -18,61 +18,36 @@ spec:
           title: base-tdb-models Branch
           type: string
           default: main
-          ui:field: RepoBranchPicker
-          ui:options:
-            repoUrl: github.com?owner=TalkingDB&repo=base-tdb-models
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
         base_tdb_clients_branch:
           title: base-tdb-clients Branch
           type: string
           default: main
-          ui:field: RepoBranchPicker
-          ui:options:
-            repoUrl: github.com?owner=TalkingDB&repo=base-tdb-clients
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
         base_tdb_helpers_branch:
           title: base-tdb-helpers Branch
           type: string
           default: main
-          ui:field: RepoBranchPicker
-          ui:options:
-            repoUrl: github.com?owner=TalkingDB&repo=base-tdb-helpers
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
         package_content_elementizer_branch:
           title: package-content-elementizer Branch
           type: string
           default: main
-          ui:field: RepoBranchPicker
-          ui:options:
-            repoUrl: github.com?owner=TalkingDB&repo=package-content-elementizer
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
         module_ttt_branch:
           title: module-ttt Branch
           type: string
           default: main
-          ui:field: RepoBranchPicker
-          ui:options:
-            repoUrl: github.com?owner=TalkingDB&repo=module-ttt
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
     - title: Docker Builds
 
       properties:
-        docker_elementizer:
+        docker_content_elementizer:
           type: boolean
           title: Build package-content-elementizer
           default: false
 
-        elementizer_tag_strategy:
+        content_elementizer_tag_strategy:
           title: package-content-elementizer Tag Strategy
           type: array
           uniqueItems: true
@@ -87,9 +62,9 @@ spec:
           default:
             - latest
 
-        elementizer_custom_tag:
+        content_elementizer_custom_tag:
           type: string
-          title: Custom Tag
+          title: package-content-elementizer Custom Tag
 
         docker_module_ttt:
           type: boolean
@@ -113,13 +88,13 @@ spec:
 
         module_ttt_custom_tag:
           type: string
-          title: Custom Tag
+          title: module-ttt Custom Tag
 
     - title: Deployment Target
 
       properties:
         vm:
-          title: Select VM
+          title: Target VM
           type: string
           enum:
             - create-new
@@ -132,7 +107,7 @@ spec:
           title: New VM Name
 
         release:
-          title: Select Release
+          title: Release
           type: string
           enum:
             - create-new
@@ -151,12 +126,12 @@ spec:
       properties:
         notify_teams:
           type: boolean
-          title: Notify Teams
+          title: Send Teams Notification
           default: true
 
         notify_email:
           type: boolean
-          title: Notify Email
+          title: Send Email Notification
           default: true
 
         additional_recipients:
@@ -176,6 +151,7 @@ spec:
           new_vm_name: ${{ parameters.new_vm_name }}
           release: ${{ parameters.release }}
           new_release_name: ${{ parameters.new_release_name }}
+
           repos_json: >
             [
               {
@@ -200,12 +176,14 @@ spec:
               }
             ]
 
-          docker_elementizer: ${{ parameters.docker_elementizer | string }}
+          docker_content_elementizer: ${{ parameters.docker_content_elementizer | string }}
+          content_elementizer_tag_strategy: ${{ parameters.content_elementizer_tag_strategy }}
+          content_elementizer_custom_tag: ${{ parameters.content_elementizer_custom_tag }}
+
           docker_module_ttt: ${{ parameters.docker_module_ttt | string }}
-          elementizer_tag_strategy: ${{ parameters.elementizer_tag_strategy }}
-          elementizer_custom_tag: ${{ parameters.elementizer_custom_tag }}
           module_ttt_tag_strategy: ${{ parameters.module_ttt_tag_strategy }}
           module_ttt_custom_tag: ${{ parameters.module_ttt_custom_tag }}
+
           notify_teams: ${{ parameters.notify_teams | string }}
           notify_email: ${{ parameters.notify_email | string }}
           additional_recipients: ${{ parameters.additional_recipients }}
@@ -215,9 +193,12 @@ spec:
       - title: Release Triggered
         content: |
           Release workflow submitted.
+
           VM: ${{ parameters.vm }}
           Release: ${{ parameters.release }}
-          Docker Elementizer: ${{ parameters.docker_elementizer }}
-          Docker Module TTT: ${{ parameters.docker_module_ttt }}
+
+          Build package-content-elementizer: ${{ parameters.docker_content_elementizer }}
+          Build module-ttt: ${{ parameters.docker_module_ttt }}
+
           Teams Notification: ${{ parameters.notify_teams }}
           Email Notification: ${{ parameters.notify_email }}
