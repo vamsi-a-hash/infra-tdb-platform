@@ -42,30 +42,6 @@ spec:
     - title: Docker Builds
 
       properties:
-        docker_content_elementizer:
-          type: boolean
-          title: Build package-content-elementizer
-          default: false
-
-        content_elementizer_tag_strategy:
-          title: package-content-elementizer Tag Strategy
-          type: array
-          uniqueItems: true
-
-          items:
-            type: string
-            enum:
-              - latest
-              - commit
-              - custom
-
-          default:
-            - latest
-
-        content_elementizer_custom_tag:
-          type: string
-          title: package-content-elementizer Custom Tag
-
         docker_module_ttt:
           type: boolean
           title: Build module-ttt
@@ -85,10 +61,32 @@ spec:
 
           default:
             - latest
+            - commit
 
         module_ttt_custom_tag:
           type: string
           title: module-ttt Custom Tag
+
+        docker_content_elementizer:
+          type: boolean
+          title: Build package-content-elementizer
+          default: false
+
+        content_elementizer_tag_strategy:
+          title: package-content-elementizer Tag Strategy
+          type: array
+          uniqueItems: true
+
+          items:
+            type: string
+            enum:
+              - latest
+              - commit
+              - custom
+
+        content_elementizer_custom_tag:
+          type: string
+          title: package-content-elementizer Custom Tag
 
     - title: Deployment Target
 
