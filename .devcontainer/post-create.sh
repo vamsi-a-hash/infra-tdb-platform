@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INFRA_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 WORKSPACE="$(cd "$INFRA_DIR/.." && pwd)"
-MODULE_DIR="$WORKSPACE/module-talkingdb"
+MODULE_DIR="$WORKSPACE/module-ttt"
 
 echo "▶ Trusting sibling repos in the workspace (WSL2 bind-mount ownership mismatch)"
 for repo_git in "$WORKSPACE"/*/.git; do
@@ -49,15 +49,15 @@ make sync
 
 if [[ -d "$MODULE_DIR" ]]; then
   if [[ ! -f "$MODULE_DIR/.env" && -f "$MODULE_DIR/.env.example" ]]; then
-    echo "▶ Bootstrapping module-talkingdb/.env from .env.example"
+    echo "▶ Bootstrapping module-ttt/.env from .env.example"
     cp "$MODULE_DIR/.env.example" "$MODULE_DIR/.env"
   fi
 
-  echo "▶ Pre-downloading spaCy en_core_web_md into module-talkingdb's venv"
+  echo "▶ Pre-downloading spaCy en_core_web_md into module-ttt's venv"
   (cd "$MODULE_DIR" && poetry run python -m spacy download en_core_web_md) \
     || echo "⚠ spaCy model download failed; 'make local' will retry on first run"
 
-  echo "▶ Installing git hooks in module-talkingdb"
+  echo "▶ Installing git hooks in module-ttt"
   (cd "$MODULE_DIR" && make install-hooks) \
     || echo "⚠ git hooks install skipped"
 fi

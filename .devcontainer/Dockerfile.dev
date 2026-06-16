@@ -1,7 +1,7 @@
 # TalkingDB contributor dev image.
 #
 # Why this Dockerfile exists:
-#   The production Dockerfile in module-talkingdb bakes app code into the
+#   The production Dockerfile in module-ttt bakes app code into the
 #   image. Contributors need the toolchain only; code is bind-mounted by
 #   DevPod. Every version below is pinned so two contributors never see
 #   different yq / Poetry / Python behavior.

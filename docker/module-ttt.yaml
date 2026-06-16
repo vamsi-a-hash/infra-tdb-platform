@@ -1,0 +1,18 @@
+services:
+  module-ttt:
+    image: talkingdb/ttt
+    container_name: module-ttt
+    pull_policy: always
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - tdb-spool:/var/tmp/tdb-spool
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.module-ttt.rule=Host(`${TTT_BACKEND_HOST}`)
+      - traefik.http.routers.module-ttt.entrypoints=websecure
+      - traefik.http.routers.module-ttt.tls.certresolver=le
+      - traefik.http.services.module-ttt.loadbalancer.server.port=8090
+
+volumes:
+  tdb-spool:
