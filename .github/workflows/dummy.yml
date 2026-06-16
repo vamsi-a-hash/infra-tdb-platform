@@ -1,0 +1,11 @@
+name: IaC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Workflow detected successfully"
