@@ -6,3 +6,4 @@ spec:
   type: team
   profile:
     displayName: Engineering
+  children: []
