@@ -47,66 +47,54 @@ spec:
           title: Build module-ttt
           default: true
 
+          allOf:
+            - if:
+                const: true
+              then:
+                properties:
+                  module_ttt_tag_strategy:
+                    title: module-ttt Tag Strategy
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: string
+                      enum:
+                        - latest
+                        - commit
+                        - custom
+                    default:
+                      - latest
+
+                  module_ttt_custom_tag:
+                    type: string
+                    title: module-ttt Custom Tag
+
         docker_content_elementizer:
           type: boolean
           title: Build package-content-elementizer
           default: false
 
-      dependencies:
-        docker_content_elementizer:
-          oneOf:
-            - properties:
-                docker_content_elementizer:
-                  const: true
-
-                content_elementizer_tag_strategy:
-                  title: package-content-elementizer Tag Strategy
-                  type: array
-                  uniqueItems: true
-                  items:
-                    type: string
-                    enum:
+          allOf:
+            - if:
+                const: true
+              then:
+                properties:
+                  content_elementizer_tag_strategy:
+                    title: package-content-elementizer Tag Strategy
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: string
+                      enum:
+                        - latest
+                        - commit
+                        - custom
+                    default:
                       - latest
-                      - commit
-                      - custom
-                  default:
-                    - latest
 
-                content_elementizer_custom_tag:
-                  type: string
-                  title: package-content-elementizer Custom Tag
-
-            - properties:
-                docker_content_elementizer:
-                  const: false
-
-        docker_module_ttt:
-          oneOf:
-            - properties:
-                docker_module_ttt:
-                  const: true
-
-                module_ttt_tag_strategy:
-                  title: module-ttt Tag Strategy
-                  type: array
-                  uniqueItems: true
-                  items:
+                  content_elementizer_custom_tag:
                     type: string
-                    enum:
-                      - latest
-                      - commit
-                      - custom
-                  default:
-                    - latest
-
-                module_ttt_custom_tag:
-                  type: string
-                  title: module-ttt Custom Tag
-
-            - properties:
-                docker_module_ttt:
-                  const: false
-
+                    title: package-content-elementizer Custom Tag
     - title: Deployment Target
 
       properties:
@@ -118,6 +106,17 @@ spec:
             - ttt-chat
           default: ttt-chat
 
+          allOf:
+            - if:
+                const: create-new
+              then:
+                properties:
+                  new_vm_name:
+                    type: string
+                    title: New VM Name
+                required:
+                  - new_vm_name
+
         release:
           title: Select Release
           type: string
@@ -128,40 +127,16 @@ spec:
             - rc3
           default: create-new
 
-      dependencies:
-        vm:
-          oneOf:
-            - properties:
-                vm:
-                  const: create-new
-                new_vm_name:
-                  type: string
-                  title: New VM Name
-              required:
-                - new_vm_name
-
-            - properties:
-                vm:
-                  enum:
-                    - ttt-chat
-
-        release:
-          oneOf:
-            - properties:
-                release:
-                  const: create-new
-                new_release_name:
-                  type: string
-                  title: New Release Name
-              required:
-                - new_release_name
-
-            - properties:
-                release:
-                  enum:
-                    - rc1
-                    - rc2
-                    - rc3
+          allOf:
+            - if:
+                const: create-new
+              then:
+                properties:
+                  new_release_name:
+                    type: string
+                    title: New Release Name
+                required:
+                  - new_release_name
     - title: Notifications
 
       properties:
