@@ -1,0 +1,95 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: talkingdb-release
+  title: TalkingDB Release Pipeline
+  description: Trigger release + optional docker build for TalkingDB repos
+spec:
+  owner: user:default/mayank.g
+
+  parameters:
+    - title: Release Configuration
+      required:
+        - hostSubdomain
+      properties:
+
+        hostSubdomain:
+          type: string
+          title: Host Subdomain
+          description: Will be used as <subdomain>.talkingdb.io
+
+        base-tdb-models-branch:
+          type: string
+          title: base-tdb-models branch
+          default: main
+
+        base-tdb-clients-branch:
+          type: string
+          title: base-tdb-clients branch
+          default: main
+
+        base-tdb-helpers-branch:
+          type: string
+          title: base-tdb-helpers branch
+          default: main
+
+        package-content-elementizer-branch:
+          type: string
+          title: package-content-elementizer branch
+          default: main
+
+        module-ttt-branch:
+          type: string
+          title: module-ttt branch
+          default: main
+
+    - title: Docker Configuration
+      properties:
+
+        docker_elementizer:
+          type: boolean
+          title: Build Docker for package-content-elementizer
+          default: false
+
+        docker_module_ttt:
+          type: boolean
+          title: Build Docker for module-ttt
+          default: true
+
+        elementizer_tag:
+          type: string
+          title: package-content-elementizer Docker Tag
+          description: Required only if Docker build is enabled
+
+        module_ttt_tag:
+          type: string
+          title: module-ttt Docker Tag
+          description: Required only if Docker build is enabled
+
+  steps:
+    - id: trigger
+      name: Trigger GitHub Workflow
+      action: github:actions:dispatch
+      input:
+        repoUrl: github.com?repo=infra-tdb-platform&owner=TalkingDB
+        workflowId: release.yml
+        branchOrTagName: main
+        workflowInputs:
+          host: ${{ parameters.hostSubdomain }}.talkingdb.io
+
+          base_tdb_models_branch: ${{ parameters["base-tdb-models-branch"] }}
+          base_tdb_clients_branch: ${{ parameters["base-tdb-clients-branch"] }}
+          base_tdb_helpers_branch: ${{ parameters["base-tdb-helpers-branch"] }}
+          package_elementizer_branch: ${{ parameters["package-content-elementizer-branch"] }}
+          module_ttt_branch: ${{ parameters["module-ttt-branch"] }}
+
+          build_docker_elementizer: ${{ parameters.docker_elementizer }}
+          build_docker_module_ttt: ${{ parameters.docker_module_ttt }}
+
+          elementizer_tag: ${{ parameters.elementizer_tag }}
+          module_ttt_tag: ${{ parameters.module_ttt_tag }}
+
+  output:
+    text:
+      - title: Triggered
+        content: Release pipeline triggered for ${{ parameters.hostSubdomain }}.talkingdb.io
