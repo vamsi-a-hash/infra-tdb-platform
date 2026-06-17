@@ -26,18 +26,18 @@ def load_repos():
     """
     repos_json = os.getenv("REPOS_JSON")
 
-    if repos_json:
+    try:
         return json.loads(repos_json)
+    except:
+        data = yaml.safe_load(REPOS_FILE.read_text())
 
-    data = yaml.safe_load(REPOS_FILE.read_text())
-
-    return [
-        {
-            "url": url,
-            "branch": "main",
-        }
-        for url in data.get("repos", [])
-    ]
+        return [
+            {
+                "url": url,
+                "branch": "main",
+            }
+            for url in data.get("repos", [])
+        ]
 
 
 def extract_name(url):

@@ -21,7 +21,6 @@ on:
 
       repos_json:
         type: string
-        required: true
 
       docker_module_ttt:
         type: string

@@ -4,7 +4,6 @@ on:
   workflow_call:
     inputs:
       repos_json:
-        required: true
         type: string
 
 jobs:

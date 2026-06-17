@@ -19,10 +19,6 @@ on:
         required: false
         type: string
 
-      repos_json:
-        required: true
-        type: string
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -43,7 +39,5 @@ jobs:
 
           RELEASE: ${{ inputs.release }}
           NEW_RELEASE_NAME: ${{ inputs.new_release_name }}
-
-          REPOS_JSON: ${{ inputs.repos_json }}
         run: |
           python actions/deploy.py
