@@ -1,0 +1,98 @@
+---
+# Install Docker Engine + Compose plugin, configure the daemon, create the
+# shared talkingdb-net network. Registry login is deferred until creds exist.
+
+- name: Ensure apt prerequisites for the Docker repo
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+  tags: [docker_host, install]
+
+- name: Ensure the apt keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  become: true
+  tags: [docker_host, install]
+
+- name: Add the Docker apt GPG key
+  ansible.builtin.get_url:
+    url: "{{ docker_host_apt_gpg_url }}"
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+  become: true
+  tags: [docker_host, install]
+
+- name: Add the Docker apt repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: [deb]
+    uris: "{{ docker_host_apt_repo_uri }}"
+    suites: ["{{ ansible_distribution_release }}"]
+    components: [stable]
+    architectures: ["{{ docker_host_apt_arch }}"]
+    signed_by: /etc/apt/keyrings/docker.asc
+    enabled: true
+    state: present
+  become: true
+  tags: [docker_host, install]
+
+- name: Install Docker Engine and the Compose plugin
+  ansible.builtin.apt:
+    name: "{{ docker_host_packages }}"
+    state: present
+    update_cache: true
+  become: true
+  tags: [docker_host, install]
+
+- name: Configure the Docker daemon
+  ansible.builtin.copy:
+    content: "{{ docker_host_daemon_options | to_nice_json }}\n"
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+  become: true
+  notify: Restart docker
+  tags: [docker_host, config]
+
+- name: Ensure the Docker service is enabled and running
+  ansible.builtin.systemd_service:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+  tags: [docker_host, service]
+
+- name: Add the service user to the docker group
+  ansible.builtin.user:
+    name: "{{ service_user }}"
+    groups: docker
+    append: true
+  become: true
+  tags: [docker_host, user]
+
+- name: Create the talkingdb Docker network
+  community.docker.docker_network:
+    name: "{{ docker_network_name }}"
+    driver: "{{ docker_host_network_driver }}"
+    state: present
+  become: true
+  tags: [docker_host, network]
+
+- name: Log in to the container registry
+  community.docker.docker_login:
+    registry_url: "{{ docker_registry }}"
+    username: "{{ docker_registry_username | default('') }}"
+    password: "{{ docker_registry_password | default('') }}"
+  become: true
+  when:
+    - docker_registry_username | default('') | length > 0
+    - docker_registry_password | default('') | length > 0
+  no_log: true
+  tags: [docker_host, registry]

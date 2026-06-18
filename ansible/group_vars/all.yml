@@ -5,6 +5,9 @@ service_group: talkingdb
 deploy_base_dir: /opt/talkingdb
 docker_network_name: talkingdb-net
 
+# Container registry (non-secret). Credentials are injected by the secrets role.
+docker_registry: docker.io
+
 tdb_services:
   module_ttt:
     port: 8090

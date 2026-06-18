@@ -12,5 +12,3 @@ common_deploy_dirs:
   - "{{ deploy_base_dir }}/config"
   - "{{ deploy_base_dir }}/data"
   - "{{ deploy_base_dir }}/releases"
-
-common_docker_network_driver: bridge
