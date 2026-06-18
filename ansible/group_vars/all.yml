@@ -8,6 +8,9 @@ docker_network_name: talkingdb-net
 # Container registry (non-secret). Credentials are injected by the secrets role.
 docker_registry: docker.io
 
+# Infisical workspace holding runtime secrets (non-secret identifier).
+infisical_workspace_id: a8820fc7-b5cc-45df-9e6a-bcd431fa59a3
+
 tdb_services:
   module_ttt:
     port: 8090
