@@ -34,7 +34,7 @@
 
 set -euo pipefail
 
-INFRA_REPO="${TDB_INFRA_REPO:-https://github.com/vamsi-a-hash/infra-tdb-platform.git}"
+INFRA_REPO="${TDB_INFRA_REPO:-https://github.com/TalkingDB/infra-tdb-platform.git}"
 INFRA_NAME="infra-tdb-platform"
 TTT_NAME="module-ttt"
 DEFAULT_ROOT="$PWD/TalkingDB"
