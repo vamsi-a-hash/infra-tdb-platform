@@ -10,7 +10,7 @@
 #   3. Asks which LLM provider to use (OpenAI / Groq / Ollama), then stores
 #      credentials in Infisical if available (installing the CLI and walking
 #      through login + project init if needed), falling back to a local
-#      infra-tdb-platform/.env file (never committed) if Infisical isn't
+#      module-ttt/.env file (never committed) if Infisical isn't
 #      usable for this user.
 #   4. Optionally launches `devpod up . --ide vscode`.
 #
@@ -29,8 +29,8 @@
 #
 # Infisical link location: this script looks for an existing .infisical.json
 # in module-ttt (a sibling repo cloned via repo.yaml). If found, it's reused
-# as-is. If not found, a new link is created there. infra-tdb-platform is no
-# longer used as a link location for Infisical.
+# as-is. If not found, a new link is created there. The .env fallback also
+# lives in module-ttt. Neither is created in infra-tdb-platform anymore.
 
 set -euo pipefail
 
@@ -91,7 +91,7 @@ ask_input() {
 # Writes or updates a single KEY=VALUE line in the .env file.
 # If the key already exists it is replaced; otherwise appended.
 
-ENV_FILE=""   # set after INFRA_NAME is cloned
+ENV_FILE=""   # set after TTT_NAME is cloned
 
 write_env() {
   local key="$1" value="$2"
@@ -295,7 +295,7 @@ echo "✔ All repositories ready under: $ROOT"
 
 # ── Phase 4: secret backend + LLM provider setup ──────────────────────────────
 
-ENV_FILE="$ROOT/$INFRA_NAME/.env"
+ENV_FILE="$ROOT/$TTT_NAME/.env"
 
 echo
 echo "── Secrets setup ────────────────────────────────────────────"
@@ -323,12 +323,17 @@ if [[ "$WANT_INFISICAL" -eq 1 ]]; then
 fi
 
 if [[ "$SECRET_BACKEND" == "env" ]]; then
+  if [[ ! -d "$ROOT/$TTT_NAME" ]]; then
+    echo "  ✖ $TTT_NAME not found at $ROOT/$TTT_NAME — cannot write .env there. Aborting." >&2
+    exit 1
+  fi
+
   # Initialise .env if it doesn't exist, then lock permissions immediately
   [[ -f "$ENV_FILE" ]] || touch "$ENV_FILE"
   chmod 600 "$ENV_FILE"
 
-  # Ensure .env is gitignored inside infra-tdb-platform
-  GITIGNORE="$ROOT/$INFRA_NAME/.gitignore"
+  # Ensure .env is gitignored inside module-ttt
+  GITIGNORE="$ROOT/$TTT_NAME/.gitignore"
   if ! grep -qxF '.env' "$GITIGNORE" 2>/dev/null; then
     echo '.env' >> "$GITIGNORE"
   fi
