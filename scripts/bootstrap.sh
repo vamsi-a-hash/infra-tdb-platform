@@ -343,7 +343,7 @@ else
 fi
 
 echo
-echo "── LLM provider setup ───────────────────────────────────────"
+echo "── LLM provider setup ──"
 
 # Allow full non-interactive override via env vars
 if [[ -n "${TDB_LLM_PROVIDER:-}" && -n "${TDB_LLM_API_KEY:-}" ]]; then
@@ -375,7 +375,7 @@ else
   esac
 
   # API key (silent input — never echoed)
-  ask_secret "  ${PROVIDER} API key"
+  ask_secret "  ${PROVIDER} API key (won't show in terminal paste and press enter)"
   LLM_API_KEY="$REPLY"
 
   if [[ -z "$LLM_API_KEY" ]]; then
@@ -386,15 +386,12 @@ else
   case "$PROVIDER" in
     openai) DEFAULT_URL="https://api.openai.com/v1" ;;
     groq)   DEFAULT_URL="https://api.groq.com/openai/v1" ;;
-    ollama) DEFAULT_URL="" ;;   # no safe default — must be their hosted URL
+    ollama) DEFAULT_URL="https://ollama.com/v1" ;;
   esac
 
   ask_input "  Base URL" "$DEFAULT_URL"
   LLM_BASE_URL="$REPLY"
 
-  if [[ "$PROVIDER" == "ollama" && -z "$LLM_BASE_URL" ]]; then
-    echo "  ⚠ No base URL entered for Ollama — you can set OLLAMA_BASE_URL manually in $ENV_FILE" >&2
-  fi
 fi
 
 # Write secrets — provider-specific key names so services can reference them directly,
@@ -420,9 +417,8 @@ esac
 echo
 if [[ "$SECRET_BACKEND" == "infisical" ]]; then
   echo "  ✔ Secrets stored in Infisical"
-  echo "  ℹ Run services with: (cd $INFISICAL_DIR && infisical run -- <your command>)"
 else
-  echo "  ✔ Secrets written to $ENV_FILE (mode 600)"
+  echo "  ✔ Secrets written to $ENV_FILE"
 fi
 echo
 
