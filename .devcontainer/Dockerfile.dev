@@ -13,6 +13,12 @@ ARG YQ_VERSION=v4.44.3
 
 USER root
 
+RUN rm -f /etc/apt/sources.list.d/yarn.list \
+    && curl -1sLf 'https://artifacts-cli.infisical.com/setup.deb.sh' | bash \
+    && apt-get update \
+    && apt-get install -y infisical \
+    && infisical --version
+
 RUN ARCH="$(dpkg --print-architecture)" && \
     curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${ARCH}" \
       -o /usr/local/bin/yq \
