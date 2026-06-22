@@ -1,0 +1,13 @@
+---
+# Dedicated venv for the DVC CLI (kept off the system Python).
+dataset_sync_venv: "{{ deploy_base_dir }}/.dvc-venv"
+
+# VM-side DVC workspace used to pull the dataset before swapping it live.
+dataset_sync_workspace: "{{ deploy_base_dir }}/dvc"
+
+# Dataset file (DVC-tracked target) and where it lives for the container.
+dataset_sync_graph_target: graphs.db
+dataset_sync_live_dir: "{{ deploy_base_dir }}/data"
+
+# Container to quiesce while the SQLite file is swapped.
+dataset_sync_service_container: module-ttt

@@ -10,3 +10,4 @@
     - secrets
     - runtime_config
     - deploy_services
+    - dataset_sync

@@ -23,6 +23,12 @@ docker_registry: docker.io
 module_ttt_image: talkingdb/ttt
 module_ttt_image_tag: latest
 
+# DVC remote for the graphs.db dataset (module-ttt's remote; non-secret).
+# S3 credentials are injected at deploy time, not stored here.
+dvc_remote_name: storage
+dvc_remote_url: s3://ttt
+dvc_remote_endpoint: https://data.talkingdb.io
+
 # Infisical workspace holding runtime secrets (non-secret identifier).
 infisical_workspace_id: a8820fc7-b5cc-45df-9e6a-bcd431fa59a3
 

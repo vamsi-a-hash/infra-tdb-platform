@@ -1,0 +1,112 @@
+---
+# Sync the graphs.db dataset from the DVC remote. Pull into a workspace, then
+# quiesce the service, swap the SQLite file atomically (dropping stale WAL),
+# and restart. Skips cleanly when no S3 credentials are provided.
+
+- name: Ensure python venv support is installed
+  ansible.builtin.apt:
+    name: python3-venv
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+  tags: [dataset_sync]
+
+- name: Install the DVC CLI (with S3 support) in a venv
+  ansible.builtin.pip:
+    name: "dvc[s3]"
+    virtualenv: "{{ dataset_sync_venv }}"
+    virtualenv_command: python3 -m venv
+  become: true
+  tags: [dataset_sync]
+
+- name: Ensure the DVC workspace exists
+  ansible.builtin.file:
+    path: "{{ dataset_sync_workspace }}"
+    state: directory
+    owner: "{{ service_user }}"
+    group: "{{ service_group }}"
+    mode: "0750"
+  become: true
+  tags: [dataset_sync]
+
+- name: Initialise the DVC workspace
+  ansible.builtin.command: "{{ dataset_sync_venv }}/bin/dvc init --no-scm"
+  args:
+    chdir: "{{ dataset_sync_workspace }}"
+    creates: "{{ dataset_sync_workspace }}/.dvc"
+  become: true
+  tags: [dataset_sync]
+
+- name: Configure the DVC remote
+  ansible.builtin.template:
+    src: dvc-config.j2
+    dest: "{{ dataset_sync_workspace }}/.dvc/config"
+    owner: "{{ service_user }}"
+    group: "{{ service_group }}"
+    mode: "0640"
+  become: true
+  tags: [dataset_sync]
+
+- name: Pull the dataset from the DVC remote
+  ansible.builtin.command: "{{ dataset_sync_venv }}/bin/dvc pull {{ dataset_sync_graph_target }}"
+  args:
+    chdir: "{{ dataset_sync_workspace }}"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ dvc_s3_access_key_id | default('') }}"
+    AWS_SECRET_ACCESS_KEY: "{{ dvc_s3_secret_access_key | default('') }}"
+  register: dataset_sync_pull
+  changed_when: "'Downloading' in dataset_sync_pull.stdout"
+  failed_when: false
+  no_log: true
+  when:
+    - dvc_s3_access_key_id | default('') | length > 0
+    - dvc_s3_secret_access_key | default('') | length > 0
+  tags: [dataset_sync]
+
+- name: Stat the pulled dataset
+  ansible.builtin.stat:
+    path: "{{ dataset_sync_workspace }}/{{ dataset_sync_graph_target }}"
+  register: dataset_sync_pulled
+  tags: [dataset_sync]
+
+- name: Stat the live dataset
+  ansible.builtin.stat:
+    path: "{{ dataset_sync_live_dir }}/{{ dataset_sync_graph_target }}"
+  register: dataset_sync_live
+  tags: [dataset_sync]
+
+- name: Swap in the new dataset (quiesce, drop stale WAL, restart)
+  when:
+    - dataset_sync_pulled.stat.exists
+    - (not dataset_sync_live.stat.exists) or (dataset_sync_pulled.stat.checksum != dataset_sync_live.stat.checksum)
+  become: true
+  tags: [dataset_sync]
+  block:
+    - name: Stop the service before swapping the dataset
+      community.docker.docker_container:
+        name: "{{ dataset_sync_service_container }}"
+        state: stopped
+      failed_when: false
+
+    - name: Remove stale SQLite WAL sidecars
+      ansible.builtin.file:
+        path: "{{ dataset_sync_live_dir }}/{{ dataset_sync_graph_target }}{{ item }}"
+        state: absent
+      loop:
+        - "-wal"
+        - "-shm"
+
+    - name: Place the new graphs.db atomically
+      ansible.builtin.copy:
+        src: "{{ dataset_sync_workspace }}/{{ dataset_sync_graph_target }}"
+        dest: "{{ dataset_sync_live_dir }}/{{ dataset_sync_graph_target }}"
+        owner: "{{ service_user }}"
+        group: "{{ service_group }}"
+        mode: "0640"
+        remote_src: true
+
+    - name: Start the service after the swap
+      community.docker.docker_container:
+        name: "{{ dataset_sync_service_container }}"
+        state: started

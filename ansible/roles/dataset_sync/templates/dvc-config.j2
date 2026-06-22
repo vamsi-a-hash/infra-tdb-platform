@@ -1,0 +1,6 @@
+# Managed by Ansible (dataset_sync) — DVC remote (non-secret; creds via env).
+[core]
+    remote = {{ dvc_remote_name }}
+['remote "{{ dvc_remote_name }}"']
+    url = {{ dvc_remote_url }}
+    endpointurl = {{ dvc_remote_endpoint }}
