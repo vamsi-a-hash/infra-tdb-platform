@@ -8,10 +8,10 @@ services:
       - tdb-spool:/var/tmp/tdb-spool
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${TTT_BACKEND_HOST}.rule=Host(`${TTT_BACKEND_HOST}`)
-      - traefik.http.routers.${TTT_BACKEND_HOST}.entrypoints=websecure
-      - traefik.http.routers.${TTT_BACKEND_HOST}.tls.certresolver=le
-      - traefik.http.services.${TTT_BACKEND_HOST}.loadbalancer.server.port=8090
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${TTT_BACKEND_HOST}`)
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=websecure
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver=le
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=8090
     networks:
       - docker
 
