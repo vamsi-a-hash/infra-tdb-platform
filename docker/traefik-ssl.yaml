@@ -23,7 +23,7 @@ services:
     networks:
       - docker
 
-network:
+networks:
   docker:
     driver: bridge
     name: docker

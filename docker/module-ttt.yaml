@@ -19,7 +19,7 @@ services:
 volumes:
   tdb-spool:
 
-network:
+networks:
   docker:
     external: true
     name: docker
