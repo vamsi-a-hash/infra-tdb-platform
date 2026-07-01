@@ -47,6 +47,16 @@ done
 echo "▶ Syncing repositories and installing Poetry dependencies (mode=git)"
 make sync
 
+echo "▶ Installing LibreOffice"
+
+if ! command -v soffice >/dev/null 2>&1; then
+  sudo apt-get update -qq
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
+    libreoffice-writer >/dev/null
+fi
+
+echo "✔ LibreOffice installed"
+
 if [[ -d "$MODULE_DIR" ]]; then
   if [[ ! -f "$MODULE_DIR/.env" && -f "$MODULE_DIR/.env.example" ]]; then
     echo "▶ Bootstrapping module-ttt/.env from .env.example"
