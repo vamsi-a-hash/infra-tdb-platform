@@ -58,10 +58,8 @@ fi
 echo "✔ LibreOffice installed"
 
 if [[ -d "$MODULE_DIR" ]]; then
-  if [[ ! -f "$MODULE_DIR/.env" && -f "$MODULE_DIR/.env.example" ]]; then
-    echo "▶ Bootstrapping module-ttt/.env from .env.example"
-    cp "$MODULE_DIR/.env.example" "$MODULE_DIR/.env"
-  fi
+  echo "▶ Configuring LLM provider (secrets + local/cloud model choice)"
+  bash "$SCRIPT_DIR/scripts/configure_llm_provider.sh"
 
   echo "▶ Pre-downloading spaCy en_core_web_md into module-ttt's venv"
   (cd "$MODULE_DIR" && poetry run python -m spacy download en_core_web_md) \
