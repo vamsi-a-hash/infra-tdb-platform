@@ -207,7 +207,7 @@ if [[ -d "$MODULE_DIR" ]]; then
     store_secret() {
       local name="$1" value="$2"
       if [[ "$SECRETS_MODE" == "infisical" ]]; then
-        if ! infisical secrets set "$name=$value" >/dev/null 2>&1; then
+        if ! (cd "$MODULE_DIR" && infisical secrets set "$name=$value" --env=dev) >/dev/null 2>&1; then
           echo "  ⚠ Failed to store $name in Infisical, writing to .env instead."
           set_var "$name" "$value"
         fi
